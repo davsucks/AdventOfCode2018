@@ -1,0 +1,1 @@
+open class Rectangle(val origin: Point, val crossCorner: Point)
