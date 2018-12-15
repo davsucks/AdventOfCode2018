@@ -1,25 +1,26 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.3.10"
+    kotlin("jvm") version "1.3.11"
 }
-buildscript {
+
+allprojects {
     repositories {
         mavenCentral()
     }
 
-    dependencies {
-        val kotlinVersion = "1.3.10"
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+    tasks.withType<Test> {
+        useJUnitPlatform()
     }
-}
 
-allprojects {
     apply(plugin = "kotlin")
 
     dependencies {
+        val junitVersion = "5.3.2"
         "implementation"(kotlin("stdlib-jdk8"))
-        compile(kotlin("stdlib-jdk8"))
+        "testImplementation"("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+        "testImplementation"("org.assertj:assertj-core:3.11.1")
+        testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     }
 
     val compileKotlin: KotlinCompile by tasks
