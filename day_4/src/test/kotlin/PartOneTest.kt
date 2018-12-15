@@ -20,4 +20,12 @@ internal class PartOneTest {
         myGuard.addRange(2..4)
         assertThat(myGuard.minutesAsleep).isEqualTo(4)
     }
+
+    @Test
+    fun `should find the minutes the guard is asleep longest`() {
+        val myGuard = Guard("Guard One")
+        myGuard.addRange(2..3)
+        myGuard.addRange(2..4)
+        assertThat(myGuard.sleepiestMinute).isEqualTo(2)
+    }
 }

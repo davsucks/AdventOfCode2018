@@ -7,34 +7,39 @@ import java.time.format.DateTimeFormatter
  *  ASSUMPTIONS:
  *      input files are never empty
  *      input files always start with a guard
- *      Guards always fall asleep at least once during their shift
  */
 class PartOne(input: File) {
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm")
     private val guards = mutableListOf<Guard>()
-    private val readLines =
-        input.readLines(Charsets.UTF_8).sorted().listIterator()
+    private val readLines = input
+        .readLines()
+        .filter { !it.isBlank() }
+        .sorted()
+        .listIterator()
 
     init {
+        // ASSUMPTION: Files always start with a guard
         val currentGuard = parseGuard(readLines.next())
         consumeAllGuards(currentGuard)
-        guards.forEach {
-            println("Guard ${it.id} was asleep for ${it.minutesAsleep} minutes total")
-        }
+        val sleepiestGuard =
+            guards.sortedByDescending { it.minutesAsleep }.first()
+        println("Guard ${sleepiestGuard.id}:")
+        println("\twas asleep for ${sleepiestGuard.minutesAsleep} minutes")
+        println("\twas most tired at minute ${sleepiestGuard.sleepiestMinute}")
     }
 
     private tailrec fun consumeAllGuards(guard: Guard) {
-        val asleepTimestamp = parseLocalDateTime(readLines.next())
-        val awakeTimestamp = parseLocalDateTime(readLines.next())
-        guard.addRange(asleepTimestamp.minute..awakeTimestamp.minute)
-
         if (!readLines.hasNext()) return
         val rawLine = readLines.next()
         if (rawLine.contains("Guard")) {
             consumeAllGuards(parseGuard(rawLine))
         } else {
+            val asleepTimestamp = parseLocalDateTime(rawLine)
+            val lineTwo = readLines.next()
+            val awakeTimestamp = parseLocalDateTime(lineTwo)
+            guard.addRange(asleepTimestamp.minute..awakeTimestamp.minute)
+
             // we read one extra line previously, need to back it up
-            readLines.previous()
             consumeAllGuards(guard)
         }
     }
@@ -59,6 +64,18 @@ class PartOne(input: File) {
         private val asleepRanges = mutableListOf<IntRange>()
         val minutesAsleep: Int
             get() = asleepRanges.fold(0) { acc, intRange -> acc + intRange.difference() }
+        val sleepiestMinute: Int
+            get() =
+                asleepRanges
+                    .fold(mutableMapOf<Int, Int>()) { acc, intRange ->
+                        intRange.associateWithTo(acc) { minute ->
+                            acc.getOrDefault(minute, 0) + 1
+                        }
+                    }
+                    .toList()
+                    .sortedByDescending { (_, value) -> value }
+                    .first()
+                    .first
 
         fun addRange(range: IntRange) = asleepRanges.add(range)
 
