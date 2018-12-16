@@ -1,7 +1,6 @@
 import java.io.File
 import PolymerReducer.capitalize
 
-
 class PartTwo(input: File) {
     init {
         val polymer = input.readLines().first().trim()

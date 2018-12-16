@@ -2,7 +2,6 @@ import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-
 /**
  *  ASSUMPTIONS:
  *      input files are never empty
@@ -82,4 +81,3 @@ class PartTwo(input: File) {
         private fun IntRange.difference(): Int = endInclusive - start
     }
 }
-

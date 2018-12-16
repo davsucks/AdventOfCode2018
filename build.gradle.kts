@@ -1,12 +1,25 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+buildscript {
+    repositories {
+        maven("https://plugins.gradle.org/m2/")
+    }
+
+    dependencies {
+        val ktlintVersion = "6.3.1"
+        classpath("org.jlleitschuh.gradle:ktlint-gradle:$ktlintVersion")
+    }
+}
+
 plugins {
     kotlin("jvm") version "1.3.11"
+    id("org.jlleitschuh.gradle.ktlint") version("6.3.1")
 }
 
 allprojects {
     repositories {
         mavenCentral()
+        maven("https://plugins.gradle.org/m2/")
     }
 
     tasks.withType<Test> {
