@@ -1,5 +1,3 @@
-import java.io.File
-
 class BoundingBox(
     private val nodesSortedByX: List<Node>,
     nodesSortedByY: List<Node>
@@ -22,7 +20,6 @@ class BoundingBox(
         lowestYValue = lowestNode.point.y
         highestXValue = rightmostNode.point.x
         highestYValue = highestNode.point.y
-
 
         boundingNodes = listOf(leftmostNode, lowestNode, rightmostNode, highestNode)
         println("Bounding Nodes:")

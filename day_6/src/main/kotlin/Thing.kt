@@ -26,6 +26,12 @@ object Thing {
             .eachCount()
             .sortedByValueDescending()
         println(counts)
+
+        // part two
+        val regionSize = boundingBox.allPoints.fold(0) { acc, point ->
+            if (allNodes.map { node -> point.distanceTo(node.point) }.sum() < 10000) acc + 1 else acc
+        }
+        println(regionSize)
     }
 
     private fun <K, V : Comparable<V>> Map<K, V>.sortedByValueDescending() =
