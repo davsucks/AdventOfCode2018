@@ -32,6 +32,7 @@ allprojects {
         val junitVersion = "5.3.2"
         "implementation"(kotlin("stdlib-jdk8"))
         "testImplementation"("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+        "testImplementation"("org.junit.jupiter:junit-jupiter-params:$junitVersion")
         "testImplementation"("org.assertj:assertj-core:3.11.1")
         testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     }

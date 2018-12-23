@@ -2,6 +2,24 @@ import java.io.File
 import java.util.TreeSet
 
 fun main() {
+    val runqueue = buildSet()
+
+    val builder = StringBuilder()
+    while (runqueue.isNotEmpty()) {
+        val currentStep = runqueue.pop()
+        currentStep.run()
+        builder.append(currentStep.name)
+        currentStep.nextSteps.forEach { nextStep ->
+            if (nextStep.canRun()) {
+                runqueue.add(nextStep)
+            }
+        }
+    }
+
+    println(builder.toString())
+}
+
+fun buildSet(): TreeSet<Step> {
     val runqueue = sortedSetOf<Step>()
     val unstartable = mutableSetOf<Step>()
     File("day_7/src/resources/input.txt")
@@ -29,29 +47,16 @@ fun main() {
             unstartable.add(postconditionStep)
             acc
         }
-
-    val builder = StringBuilder()
-    while (runqueue.isNotEmpty()) {
-        val currentStep = runqueue.pop()
-        currentStep.run()
-        builder.append(currentStep.name)
-        currentStep.nextSteps.forEach { nextStep ->
-            if (nextStep.canRun()) {
-                runqueue.add(nextStep)
-            }
-        }
-    }
-
-    println(builder.toString())
+    return runqueue
 }
 
-private fun <E> TreeSet<E>.pop(): E {
+fun <E> MutableCollection<E>.pop(): E {
     val returnVal = this.first()
     this.remove(returnVal)
     return returnVal
 }
 
-private fun <E> Collection<E>.doesNotContain(element: E) = !this.contains(element)
+fun <E> Collection<E>.doesNotContain(element: E) = !this.contains(element)
 
 fun <T> TreeSet<T>.contains(predicate: (T) -> Boolean) = this.find(predicate) != null
 
